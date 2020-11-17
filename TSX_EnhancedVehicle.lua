@@ -737,14 +737,19 @@ function TSX_EnhancedVehicle:onDraw()
       -- get values
       fuel_diesel_current = -1
       fuel_adblue_current = -1
+      fuel_electric_current = -1
       for _, fillUnit in ipairs(self.spec_fillUnit.fillUnits) do
-        if fillUnit.fillType == 32 then -- Diesel
+        if fillUnit.fillType == 32 or fillUnit.fillType == 33 then -- Diesel
           fuel_diesel_max = fillUnit.capacity
           fuel_diesel_current = fillUnit.fillLevel
         end
-        if fillUnit.fillType == 33 then -- AdBlue
+        if fillUnit.fillType == 34 fillUnit.fillType == 35 then -- AdBlue
           fuel_adblue_max = fillUnit.capacity
           fuel_adblue_current = fillUnit.fillLevel
+        end
+        if fillUnit.fillType == 1 then -- Electric
+          fuel_electric_max = fillUnit.capacity
+          fuel_electric_current = fillUnit.fillLevel
         end
       end
 
@@ -753,12 +758,17 @@ function TSX_EnhancedVehicle:onDraw()
       fuel_txt_usage = ""
       fuel_txt_diesel = ""
       fuel_txt_adblue = ""
+      fuel_txt_electric = ""
       if fuel_diesel_current >= 0 then
         fuel_txt_diesel = string.format("%.1f l/%.1f l", fuel_diesel_current, fuel_diesel_max)
         h = h + fS + tP
       end
       if fuel_adblue_current >= 0 then
         fuel_txt_adblue = string.format("%.1f l/%.1f l", fuel_adblue_current, fuel_adblue_max)
+        h = h + fS + tP
+      end
+      if fuel_electric_current >= 0 then
+        fuel_txt_electric = string.format("%.1f l/%.1f l", fuel_electric_current, fuel_electric_max)
         h = h + fS + tP
       end
       if self.spec_motorized.isMotorStarted == true and self.isServer then
